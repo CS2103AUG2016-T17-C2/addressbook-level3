@@ -1,7 +1,9 @@
 package seedu.addressbook.parser;
 
 import seedu.addressbook.commands.*;
+import seedu.addressbook.commands.EditCommand.Editfield;
 import seedu.addressbook.data.exception.IllegalValueException;
+import seedu.addressbook.parser.Parser.ParseException;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -25,7 +27,10 @@ public class Parser {
                     + " (?<isEmailPrivate>p?)e/(?<email>[^/]+)"
                     + " (?<isAddressPrivate>p?)a/(?<address>[^/]+)"
                     + "(?<tagArguments>(?: t/[^/]+)*)"); // variable number of tags
-
+    public static final Pattern EDIT_PERSON_DATA_ARGS_FORMAT = 
+            Pattern.compile(" (?<targetIndex>.+) "
+                    + " (?<editfield>)/"
+                    + " (?<editString>)");
 
     /**
      * Signals that the user input could not be parsed.
@@ -48,8 +53,10 @@ public class Parser {
      *
      * @param userInput full user input string
      * @return the command based on the user input
+     * @throws Exception 
+     * @throws NumberFormatException 
      */
-    public Command parseCommand(String userInput) {
+    public Command parseCommand(String userInput) throws NumberFormatException, Exception {
         final Matcher matcher = BASIC_COMMAND_FORMAT.matcher(userInput.trim());
         if (!matcher.matches()) {
             return new IncorrectCommand(String.format(MESSAGE_INVALID_COMMAND_FORMAT, HelpCommand.MESSAGE_USAGE));
@@ -64,6 +71,9 @@ public class Parser {
 
             case DeleteCommand.COMMAND_WORD:
                 return prepareDelete(arguments);
+                
+            case EditCommand.COMMAND_WORD:
+                return prepareEdit(arguments);
 
             case ClearCommand.COMMAND_WORD:
                 return new ClearCommand();
@@ -88,6 +98,28 @@ public class Parser {
                 return new HelpCommand();
         }
     }
+    /**
+     * Parses arguments in the context of the edit person command.
+     *
+     * @param args full command args string
+     * @return the prepared command
+     * @throws ParseException 
+     * @throws NumberFormatException 
+     */
+
+    private Command prepareEdit(String args) throws NumberFormatException, ParseException {
+           final Matcher matcher = EDIT_PERSON_DATA_ARGS_FORMAT.matcher(args.trim());
+           // Validate arg string format
+           if (!matcher.matches()) {
+               return new IncorrectCommand(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE));
+           }
+       try {   
+               int targetIndex= parseArgsAsDisplayedIndex(matcher.group("targetIndex"));
+               return new EditCommand( targetIndex, matcher.group("editfield"), matcher.group("editString"));
+           } catch (IllegalValueException ive) {
+               return new IncorrectCommand(ive.getMessage());
+           }
+       }
 
     /**
      * Parses arguments in the context of the add person command.

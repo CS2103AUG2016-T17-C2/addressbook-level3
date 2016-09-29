@@ -81,7 +81,7 @@ public class AddressBook {
         syncTagsWithMasterList(toAdd);
         allPersons.add(toAdd);
     }
-
+    
     /**
      * Adds a tag to the list of tags present in the address book.
      *
@@ -113,6 +113,7 @@ public class AddressBook {
     public void removePerson(ReadOnlyPerson toRemove) throws PersonNotFoundException {
         allPersons.remove(toRemove);
     }
+    
 
     /**
      * Removes the equivalent Tag from the address book.
@@ -156,6 +157,9 @@ public class AddressBook {
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(allPersons, allTags);
+        return Objects.hash(allPersons, allTags); 
     }
-}
+
+
+
+    }
