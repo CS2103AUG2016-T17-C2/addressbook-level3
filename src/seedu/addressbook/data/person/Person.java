@@ -65,6 +65,26 @@ public class Person implements ReadOnlyPerson {
     public void setTags(UniqueTagList replacement) {
         tags.setTags(replacement);
     }
+    
+    public void changeName (Name newname){
+        this.name = null;
+        this.name = newname;
+    }
+
+    public void changePhone (Phone newPhone){
+        this.phone = null;
+        this.phone = newPhone;
+    }
+
+    public void changeEmail (Email newEmail){
+        this.email = null;
+        this.email = newEmail;
+    }
+
+    public void changeAddress (Address newAddress){
+        this.address = null;
+        this.address = newAddress;
+    }
 
     @Override
     public boolean equals(Object other) {

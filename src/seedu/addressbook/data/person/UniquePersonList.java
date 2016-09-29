@@ -93,7 +93,9 @@ public class UniquePersonList implements Iterable<Person> {
         }
         internalList.add(toAdd);
     }
+    
 
+  
     /**
      * Removes the equivalent person from the list.
      *
@@ -130,5 +132,6 @@ public class UniquePersonList implements Iterable<Person> {
     public int hashCode() {
         return internalList.hashCode();
     }
+
 
 }

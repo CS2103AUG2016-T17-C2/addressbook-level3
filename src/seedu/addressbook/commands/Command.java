@@ -2,6 +2,7 @@ package seedu.addressbook.commands;
 
 import seedu.addressbook.common.Messages;
 import seedu.addressbook.data.AddressBook;
+import seedu.addressbook.data.person.Person;
 import seedu.addressbook.data.person.ReadOnlyPerson;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import static seedu.addressbook.ui.Gui.DISPLAYED_INDEX_OFFSET;
 public abstract class Command {
     protected AddressBook addressBook;
     protected List<? extends ReadOnlyPerson> relevantPersons;
+    private List<Person> relevantEditablePersons;
     private int targetIndex = -1;
 
     /**
@@ -56,6 +58,15 @@ public abstract class Command {
      */
     protected ReadOnlyPerson getTargetPerson() throws IndexOutOfBoundsException {
         return relevantPersons.get(getTargetIndex() - DISPLAYED_INDEX_OFFSET);
+    }
+    
+    /**
+     * Extracts the the target person in the last shown list from the given arguments.
+     *
+     * @throws IndexOutOfBoundsException if the target index is out of bounds of the last viewed listing
+     */
+    protected Person getTargetEditablePerson() throws IndexOutOfBoundsException {
+        return relevantEditablePersons.get(getTargetIndex() - DISPLAYED_INDEX_OFFSET);
     }
 
     public int getTargetIndex() {
